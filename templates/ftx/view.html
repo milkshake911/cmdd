@@ -1,0 +1,24 @@
+﻿<link rel="stylesheet" href="{{ url_for('static',filename='css/ftx/view.css') }}">
+{% extends "ftx/layout.html" %}
+{% block content %}
+<div id="container-view">
+    {% if not valide %}
+    <p style="color: white;">
+        Quantity : 0 - Pips Buy : 0 - Pips Sell: 0 - Capital : 0 - Max Position : 0 
+        -> Trade Options
+    </p>
+    {% else %}
+        {% for item in values %}
+    <p style="color:white">
+        Quantity : {{item.qty}} - Pips Buy : {{item.pips_buy}} -
+        Pips Sell : {{item.pips_sell}} - Capital : {{item.capital}} - Max Position (Long) : {{item.max_pos_buy}} -
+        Max Position (Short) : {{ item.max_pos_sell }} ->{% if item.options == "Timer Stop Loss" %} {{ item.options }} - Timer : {{ item.timer }}s -
+        Type : {{ item.order_type }} {% else %} Percentage Stop Loss - Percentage (Long) : {{item.pl_long}}% - Percentage (Short) : {{item.pl_short}}% - 
+        Type : {{ item.order_type }}
+        {% endif %}
+    </p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock content%}

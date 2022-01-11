@@ -1,0 +1,106 @@
+
+
+.form-group select option {
+	background-color: #1f1f1f;
+}
+
+
+.form-group select:focus {
+	background-color: rgba(22, 19, 19, 0.40);
+	color: white;
+}
+
+.form-group select:hover {
+	background-color: rgba(22, 19, 19, 0.40);
+}
+
+.form-group select datalist option:hover {
+	background-color: white;
+	color: black;
+}
+
+
+.form-group select option[data-checked] {
+	background-color: white;
+	color: black;
+}
+
+
+.form-group select option[value="0"] {
+	display: none;
+}
+
+#container-inputs{
+	margin:auto;
+	display:flex;
+	width:80%;
+}
+
+#parameterA{
+	width: 30%;
+	float:left;
+}
+
+
+#parameterB{
+	float: right;
+	margin-left:auto;
+}
+
+#parameterB #Type{
+	height:50px;
+	margin:auto;
+}
+
+
+.pips-container{
+	height: 100px;
+}
+.pips-container #pips_buy,
+.pips-container #pips_sell{
+	width:145px;
+}
+
+
+#order-group{
+	width:300px;
+	align-items: center;
+	float:right;
+	margin-left:auto;
+}
+
+#signal-group {
+	text-align: center;
+	margin-bottom: 10px;
+	margin-top:10px;
+}
+#signal-group label{
+	width:95px;
+	font-size:16px;
+}
+#signal-group span{
+	font-size:16px;
+}
+#symbols{
+	width: 100px;
+}
+
+#market{
+	width:150px;
+}
+
+#limit{
+	width:150px;
+}
+
+#qty{
+	width:300px;
+}
+
+#limit_price{
+	width:300px;
+}
+
+#BuyBtn{
+	margin-right: 2rem;
+}

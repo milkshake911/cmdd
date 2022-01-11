@@ -1,0 +1,12 @@
+
+.design {
+	text-align: center;
+	font-size: 30px;
+	color: #444444;
+	margin:auto;
+}
+.homepage{
+	background: url("../../img/ftx/finance.png") no-repeat ;
+	background-size: cover;
+	background-position:center;
+}

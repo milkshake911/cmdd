@@ -1,0 +1,27 @@
+{% extends "ftx/layout.html" %}
+{% block content %}
+    <div class="container">
+        <form method="post" action="{{ url_for('api') }}">
+            {{ form.hidden_tag() }}
+            <fieldset>
+            <div class="form-group">
+                {{ form.apiKeyFTX.label(class="form-control-label") }}
+                {{ form.apiKeyFTX(class="form-control form-control-lg")}}
+            </div>
+            <div class="form-group">
+                {{ form.apiSecretFTX.label(class="form-control-label") }}
+                {{ form.apiSecretFTX(class="form-control form-control-lg")}}
+            </div>
+            <div class="form-group">
+                {{ form.apiKeyBB.label(class="form-control-label") }}
+                {{ form.apiKeyBB(class="form-control form-control-lg")}}
+            </div>
+            <div class="form-group">
+                {{ form.apiSecretBB.label(class="form-control-label") }}
+                {{ form.apiSecretBB(class="form-control form-control-lg")}}
+            </div>
+            {{ form.submit(class="btn btn-primary mt-2")}}
+            </fieldset>
+        </form>
+    </div>
+{% endblock content %}

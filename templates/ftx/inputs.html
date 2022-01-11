@@ -1,0 +1,334 @@
+﻿<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/ftx/inputs.css')}}">
+<script type="text/javascript" src="{{url_for('static',filename='js/ftx/inputs.js')}}"></script>
+{% extends "ftx/layout.html" %}
+{% block content %}
+<!--<div class="container-chart">
+	<div id="LiveChart"></div>
+</div>
+
+<script type="text/javascript">
+	var candleData = {{ Candles| tojson }};
+	const chartProperties = {
+		width: 1500,
+		height: 800,
+		timeScale: {
+			timeVisible: true,
+			secondsVisible: true,
+			borderVisible: false,
+			barSpacing: 5,
+
+		},
+		priceScale: {
+			borderVisible: false,
+			scaleMargins: {
+				top: 0.25,
+				bottom: 0.25,
+			},
+		},
+	};
+
+	const domElement = document.getElementById("LiveChart");
+	const chart = LightweightCharts.createChart(domElement, chartProperties);
+	const candleSeries = chart.addCandlestickSeries();
+
+	chart.applyOptions({
+		grid: {
+			vertLines: {
+				color: 'rgba(0, 0, 0, 0.2)',
+				style: 1,
+				visible: true,
+			},
+			horzLines: {
+				color: 'rgba(0, 0, 0, 0.2)',
+				style: 1,
+				visible: true,
+			}
+
+		},
+		layout: {
+			backgroundColor: 'transparent',
+			textColor: 'white',
+			fontSize: 14,
+			fontFamily: 'Calibri',
+
+		},
+
+	});
+
+	candleSeries.setData(candleData);
+</script>
+-->
+
+<div class="container-fluid" id="container-inputs">
+<div id="parameterA">
+	<form method="post" action="{{ url_for('ftxInputs') }}">
+	{{ form.hidden_tag() }}
+		<fieldset class="form-group">
+			<div class="mb-2" style="height: 50px;">
+				{{ form.checkbox(class="mt-3 float-left",onclick="javascript: disableParamaterA(this);")}}
+				<legend class="border-bottom mb-4 float-right" style="width:92%;">Parameter A</legend>
+			</div>
+			<div id="container-inputs-a">
+				<div class="form-group">
+					{{ form.quantity.label(class="form-control-label") }}
+					{% if form.quantity.errors %}
+					{{ form.quantity(class="form-control form-control-lg is-invalid") }}
+					<div class="invalid-feedback">
+						{% for errors in form.quantity.errors %}
+						<span>{{ error }}</span>
+						{% endfor%}
+					</div>
+					{% else %}
+					{{ form.quantity(class="form-control form-control-lg",id="quantity") }}
+					{% endif %}
+				</div>
+				<div class="pair-container">
+					<div class="form-group float-left">
+						<input type="checkbox" name="name" class="mr-2" onclick="javascript: disablePipsBuy(this);" value="" />
+						{{ form.pips_buy.label(class="form-control-label") }}
+						{% if form.pips_buy.errors %}
+						{{ form.pips_buy(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in form.pips_buy.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ form.pips_buy(class="form-control form-control-lg",id="pips_buy") }}
+						{% endif%}
+	
+					</div>
+					<div class="form-group float-right">
+						<input type="checkbox" name="name" class="mr-2" onclick="javascript: disablePipsSell(this);" value="" />
+						{{ form.pips_sell.label(class="form-control-label") }}
+						{% if form.pips_sell.errors %}
+						{{ form.pips_sell(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in form.pips_sell.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ form.pips_sell(class="form-control form-control-lg",id="pips_sell") }}
+						{% endif%}
+					</div>
+				</div>
+				<div class="pair-container">
+					<div class="form-group float-left">
+						<input type="checkbox" name="name" class="mr-2" onclick="javascript: disableMaxPosBuy(this);" value=""/>
+							{{ form.max_pos_buy.label(class="form-control-label") }}
+							{% if form.max_pos_buy.errors %}
+							{{ form.max_pos_buy(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in form.max_pos_buy.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ form.max_pos_buy(class="form-control form-control-lg",id='max_pos_buy') }}
+						{% endif%}
+					</div>
+					<div class="form-group float-right">
+						<input type="checkbox" name="name" class="mr-2" onclick="javascript: disableMaxPosSell(this);" value="" />
+						{{ form.max_pos_sell.label(class="form-control-label") }}
+						{% if form.max_pos_sell.errors %}
+						{{ form.max_pos_sell(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in form.max_pos_sell.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ form.max_pos_sell(class="form-control form-control-lg",id='max_pos_sell') }}
+						{% endif%}
+					</div>
+				</div>
+				<div class="form-group">
+					{{ form.Options.label(class="form-control-label") }}
+					{{ form.Options(class="form-control form-control-lg",onchange="optionsTrade(this)") }}
+				</div>
+				<div id="timerOptions" style="display:none" class="mt-4">
+					<div class="form-group mt-2">
+						<input type="number" min="0" name="timer" id="timer" placeholder="Timer" class="input input-bordered text-light"/>
+					</div>
+					<div class="form-group">
+						<span class="label-text">Order Type</span>
+						<div class="pt-2">
+							<label class="inline-flex items-center" for="limitType">
+								<input type="radio" name="typeTimer"
+										id="limitType" class="form-radio" value="False" onclick="javascript: recursiveTimerA();"/>
+								<span class="pl-1">Limit</span>
+							</label>
+							<label class="inline-flex items-center pl-2" for="marketType">
+								<input type="radio" name="typeTimer"
+										id="marketType" class="form-radio" value="True" onclick="javascript: recursiveTimerA();"/>
+								<span class="pl-1">Market</span>
+							</label>
+						</div>
+					</div>
+					<div class="form-group" id="TimerA" style="display:none">
+						<input type="number" name="SndTimer" id="SndTimer" placeholder="Recursive Timer"
+								class="input input-bordered text-light" />
+					</div>
+				</div>
+				<div id="percentageOptions" style="display:none" class="mt-4">
+					<div class="form-group float-left mr-4">
+						{{ form.percentage_long(class="text-light") }}
+					</div>
+					<div class="form-group">
+						{{ form.percentage_short(class="text-light") }}
+					</div>
+					<div class="form-group">
+						<span class="label-text inline-flex">Order Type</span>
+						<div class="pt-2">
+							<label class="inline-flex items-center" for="limitType">
+								<input type="radio" name="typePercentage"
+										id="limitType" class="form-radio" value="False"/>
+								<span class="pl-1">Limit</span>
+							</label>
+							<label class="inline-flex items-center pl-2" for="marketType">
+								<input type="radio" name="typePercentage"
+										id="marketType" class="form-radio" value="True"/>
+								<span class="pl-1">Market</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group pt-3">
+					{{ form.validate(class="btn btn-success") }}
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+<div id="parameterB">
+	<form method="post" action="{{ url_for('ftxInputs') }}">
+		{{ stratForm.hidden_tag() }}
+		<fieldset class="form-group">
+			<div class="mb-2" style="height: 50px;">
+				{{ stratForm.checkbox(class="mr-2 mt-3 float-left",onclick="javascript: disableParamaterB(this);")}}
+				<legend class="border-bottom mb-4 float-right" style="width:92%;">Parameter B</legend></li>
+			</div>
+			<div id="container-inputs-b">
+				<div class="form-group">
+					{{ stratForm.qty.label(class="form-control-label") }}
+					{{ stratForm.qty(class="form-control form-control-lg") }}
+				</div>
+				<div class="pair-container">
+					<div class="form-group float-left">
+						{{ stratForm.pips_buy.label(class="form-control-label") }}
+						{% if stratForm.pips_buy.errors %}
+						{{ stratForm.pips_buy(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in stratForm.pips_buy.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ stratForm.pips_buy(class="form-control form-control-lg") }}
+						{% endif%}
+					</div>
+					<div class="form-group float-right">
+						{{ stratForm.pips_sell.label(class="form-control-label") }}
+						{% if stratForm.pips_sell.errors %}
+						{{ stratForm.pips_sell(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in stratForm.pips_sell.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ stratForm.pips_sell(class="form-control form-control-lg") }}
+						{% endif%}
+					</div>
+				</div>
+				<div class="pair-container">
+					<div class="form-group float-left">
+						{{ stratForm.timer.label(class="form-control-label") }}
+						{% if stratForm.timer.errors %}
+						{{ stratForm.timer(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for errors in stratForm.timer.errors %}
+							<span>{{ error }}</span>
+							{% endfor%}
+						</div>
+						{% else %}
+						{{ stratForm.timer(class="form-control form-control-lg", id="timer") }}
+						{% endif%}
+					</div>
+					<div class="form-group float-right">
+						{{ stratForm.cancel_order.label(class="form-control-label") }}
+						{{ stratForm.cancel_order(class="form-control form-control-lg",id="cancel_order") }}
+					</div>
+				</div>
+				<div class="pair-container">
+					<div class="form-group float-left" id="Type">
+						<span class="label-text">Order Type</span>
+						<div class="pt-2">
+							<label class="inline-flex items-center" for="limitTypeB">
+								<input type="radio" name="typeStrat"
+										id="limitTypeB" class="form-radio" value="False" onclick="javascript: recursiveTimerB();"/>
+								<span class="pl-1">Limit</span>
+							</label>
+							<label class="inline-flex items-center pl-2" for="marketTypeB">
+								<input type="radio" name="typeStrat"
+										id="marketTypeB" class="form-radio" value="True" onclick="javascript: recursiveTimerB();"/>
+								<span class="pl-1">Market</span>
+							</label>
+						</div>
+					</div>
+					<span class="label-text float-left" id="reopening">Reopening</span>
+					<div class="form-group float-right mt-3">
+						<label class="switch">
+							{{ stratForm.reopening() }}
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</div>
+				
+				<div class="form-group" id="TimerB" style="display:none">
+					{{ stratForm.recursive_timer(class="text-light mt-4")}}
+				</div>
+				<div class="form-group mt-3">
+					{{ stratForm.submit(class="btn btn-success") }}
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+<div id="order-group">
+	<form method="post" action="{{ url_for('ftxInputs') }}">
+		{{ orderForm.hidden_tag() }}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Manual Orders</legend>
+			<div class="btn-group btn-group-toggle" data-toggle="buttons">
+				<label class="btn btn-outline-light" for="limit" id="Limit">
+					<input type="radio" name="orderType" id="limit" autocomplete="off" value="limit">Limit
+				</label>
+				<label class="btn btn-outline-light" for="market" id="Market">
+					<input type="radio" name="orderType" id="market" autocomplete="off" value="market">Market
+				</label>
+			</div>
+			<div class="form-group mt-4">
+				{{ orderForm.symbols(class="form-control form-control-sm")}}
+			</div>
+			<div class='form-group mt-3' id="limit_price">
+				{{ orderForm.limit_price.label(class="form-control-label") }}
+				{{ orderForm.limit_price(class="text-light") }}
+			</div>
+			<div class='form-group' id="qty">
+				{{ orderForm.qty.label(class="form-control-label",id="qty") }}
+				{{ orderForm.qty(class="text-light") }}
+			</div>
+			<div class="btn-group mt-2" role="group">
+				{{ orderForm.Buy(class="btn btn-success rounded",id="BuyBtn")}}
+				{{ orderForm.Sell(class="btn btn-danger rounded")}}
+			</div>
+		</fieldset>
+	</form>
+</div>
+</div>
+
+	
+
+{% endblock content %}

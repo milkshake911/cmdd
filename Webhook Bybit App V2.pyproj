@@ -1,0 +1,122 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>540219ae-8f7f-4400-be2b-26c711174d26</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>app.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>Webhook Bybit App V2</Name>
+    <RootNamespace>Webhook Bybit App V2</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda38-64</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="configs\BYBITConfig.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configs\FTXConfig.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app.py" />
+    <Compile Include="Forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clients\BYBITClient.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clients\FTXClient.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Testing.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="static\css\bybit\homepage.css" />
+<<<<<<< HEAD
+    <Content Include="static\css\bybit\inputs.css" />
+=======
+    <Content Include="static\css\bybit\inputs.css">
+      <SubType>Code</SubType>
+    </Content>
+>>>>>>> 6720f317ec07e74800149604f9f784fae40f41f8
+    <Content Include="static\css\ftx\inputs.css" />
+    <Content Include="static\css\style\main.css" />
+    <Content Include="static\css\style\style.css" />
+    <Content Include="static\img\ftx\finance.png" />
+    <Content Include="static\js\bybit\inputs.js" />
+    <Content Include="static\js\ftx\inputs.js" />
+    <Content Include="static\js\Chart.js" />
+    <Content Include="static\img\ftx\background.jpg" />
+    <Content Include="static\img\ftx\bgtest.jpg" />
+    <Content Include="static\img\ftx\jessica-wong-kHgqvKOziSQ-unsplash.jpg" />
+    <Content Include="Procfile" />
+    <Content Include="requirements.txt" />
+    <Content Include="static\css\ftx\homepage.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="static\js\LiveChart.js" />
+    <Content Include="static\css\ftx\testing.css" />
+    <Content Include="static\src\style.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\bybit\inputs.html" />
+    <Content Include="templates\bybit\journal.html" />
+    <Content Include="templates\bybit\layout.html" />
+    <Content Include="templates\bybit\view.html" />
+    <Content Include="templates\bybit\welcome.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\ftx\inputs.html" />
+    <Content Include="templates\ftx\journal.html" />
+    <Content Include="templates\ftx\layout.html" />
+    <Content Include="templates\ftx\testing.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="templates\ftx\view.html" />
+    <Content Include="templates\ftx\welcome.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="configs\" />
+    <Folder Include="clients\" />
+    <Folder Include="static\css\ftx\" />
+    <Folder Include="static\css\bybit\" />
+    <Folder Include="static\css\style\" />
+    <Folder Include="static\img\ftx\" />
+    <Folder Include="static\img\bybit\" />
+    <Folder Include="static\js\" />
+    <Folder Include="static\img\" />
+    <Folder Include="static\" />
+    <Folder Include="static\css\" />
+    <Folder Include="static\js\bybit\" />
+    <Folder Include="static\js\ftx\" />
+    <Folder Include="static\src\" />
+    <Folder Include="templates\" />
+    <Folder Include="templates\ftx\" />
+    <Folder Include="templates\bybit\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda38-64" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
