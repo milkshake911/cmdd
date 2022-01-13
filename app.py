@@ -10,7 +10,7 @@ import json
 from configs import FTXConfig, BYBITConfig
 from datetime import datetime
 import pytz
-from Forms import *
+from Forms import LoginForm,FTXInputsForms,BYBITInputsForms,TestingForm,FTXOrdersForms,BBOrdersForms,FTXStrat,BBStrat,APIKEY
 from Testing import *
 import pandas as pd 
 import os
@@ -295,8 +295,9 @@ if not db_file_exits:
 
 
 
+
 # QUERY FTX_INPUT
-def FTXQuery():
+def FTXQueryLastSymbol():
     connection = sqlite3.connect("Database.db")
     cursor = connection.cursor()
 
@@ -723,7 +724,7 @@ def ftxwebhook():
         # Symbol: BTCUSD
         #symbol = data["ticker"]
         #symbol_data = symbol[:-4] + "-" + symbol[-4:]
-        symbol = FTXQuery()
+        symbol = FTXQueryLastSymbol()
         symbol_data = symbol
         # Price close FTX
         price = data["strategy"]["order_price"]
@@ -1490,6 +1491,6 @@ def bybitWebhook():
     
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", debug=True)
         
         

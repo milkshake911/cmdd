@@ -1,4 +1,4 @@
-import sqlite3
+
 from typing import Text
 from flask.app import Flask
 from flask_wtf import FlaskForm
