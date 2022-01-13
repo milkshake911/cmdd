@@ -1,12 +1,21 @@
-
+import sqlite3
 from typing import Text
 from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, FloatField, IntegerField, DateField, SelectField, BooleanField
 from wtforms.validators import EqualTo, DataRequired
 from datetime import datetime
+from app import get_perps
 
+def FTXQuery():
+    connection = sqlite3.connect("Database.db")
+    cursor = connection.cursor()
 
+    cursor.execute("SELECT * FROM ftx_input")
+    rows = cursor.fetchall()
+
+    LastRowData = rows[-1]
+    return LastRowData
 
 
 class LoginForm(FlaskForm):
@@ -20,23 +29,24 @@ class LoginForm(FlaskForm):
 class FTXInputsForms(FlaskForm):
 
     checkbox = BooleanField('?Disabled')
+    symbols = SelectField(validators=[DataRequired()],choices=[perpmarket for perpmarket in get_perps()],default=FTXQuery()[-1])
 
-    quantity = FloatField('Quantity ($)', validators=[DataRequired()],default=0)
+    quantity = FloatField('Quantity ($)', validators=[DataRequired()],default=FTXQuery()[1])
 
-    pips_buy = FloatField('Pips Buy', validators=[DataRequired()],default=0)
+    pips_buy = FloatField('Pips Buy', validators=[DataRequired()],default=FTXQuery()[2])
 
-    pips_sell = FloatField('Pips Sell', validators=[DataRequired()],default=0)
+    pips_sell = FloatField('Pips Sell', validators=[DataRequired()],default=FTXQuery()[3])
 
-    max_pos_buy = IntegerField('Max Position (Long)', validators=[DataRequired()],default=0)
+    max_pos_buy = IntegerField('Max Position (Long)', validators=[DataRequired()],default=FTXQuery()[5])
     
-    max_pos_sell = IntegerField('Max Position (Short)', validators=[DataRequired()],default=0)
+    max_pos_sell = IntegerField('Max Position (Short)', validators=[DataRequired()],default=FTXQuery()[6])
 
     
     Options = SelectField('Options',choices=[("0",'Stop Loss Options'),('1','Timer Stop Loss'),('2','Percentage Stop Loss')])
 
-    percentage_long = FloatField(render_kw={'placeholder':'Percentage Loss (Long)'})
+    percentage_long = FloatField(render_kw={'placeholder':'Percentage Loss (Long)'}, default=FTXQuery()[8])
 
-    percentage_short = FloatField(render_kw={'placeholder':'Percentage Loss (Short)'})
+    percentage_short = FloatField(render_kw={'placeholder':'Percentage Loss (Short)'}, default=FTXQuery()[9])
 
     validate = SubmitField('Validate')
 

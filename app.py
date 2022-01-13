@@ -17,6 +17,7 @@ import os
 from clients.FTXClient import FTXClient
 from clients.BYBITClient import BBClient
 from time import sleep
+import sqlite3
 
 
 # ORDER METHODS
@@ -140,6 +141,7 @@ users.append(User(id=2,username='Zac',password='Zac123'))
 
 class FTXInput(db.Model):
     id = db.Column("id",db.Integer, primary_key=True)
+    symbol = db.Column("symbol",db.String(20),default="")
     qty = db.Column(db.Integer,default=0)
     pips_buy = db.Column(db.Integer,default=0)
     pips_sell = db.Column(db.Integer,default=0)
@@ -155,12 +157,13 @@ class FTXInput(db.Model):
     activated = db.Column(db.Boolean,default=False)
     
 
-    def __init__(self,qty,capital,max_pos_buy,max_pos_sell,pips_buy,
+    def __init__(self,symbol,qty,max_pos_buy,max_pos_sell,pips_buy,
                  pips_sell,timer,order_type,recursive_timer,options,pl_long,pl_short,activated):
+        self.symbol = symbol # added new
         self.qty = qty
         self.pips_buy = pips_buy
         self.pips_sell = pips_sell
-        self.capital = capital
+        #self.capital = capital
         self.max_pos_buy = max_pos_buy
         self.max_pos_sell = max_pos_sell
         self.options = options
@@ -286,6 +289,31 @@ if not db_file_exits:
     db.create_all()
 
    
+
+# GET PERPS ONLY
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def get_perps():
+    SYMBOLS = FTXClient.get_futures()
+    OnlyPerps = []
+    for PerpMarkets in SYMBOLS:
+    #print(markets["name"])
+        if "perp" in PerpMarkets["name"].lower():
+            OnlyPerps.append(PerpMarkets["name"])
+    return OnlyPerps
+
+
+# QUERY FTX_INPUT
+def FTXQuery():
+    connection = sqlite3.connect("Database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM ftx_input")
+    rows = cursor.fetchall()
+
+    LastSymbol = rows[-1][-1]
+    return LastSymbol
+
+
 # ROUTES AND METHODS FOR TRADES
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 @app.before_request
@@ -469,7 +497,7 @@ def ftxInputs():
                 flash('Validation incorrect. Please fill all inputs!','danger')
         else:
             flash('Validation correct. Update done!', 'success')
-        inputs = FTXInput(qty=form.quantity.data,pips_buy=form.pips_buy.data,pips_sell=form.pips_sell.data,capital=form.capital_fund.data,max_pos_sell=form.max_pos_sell.data,
+        inputs = FTXInput(symbol=form.symbols.data,qty=form.quantity.data,pips_buy=form.pips_buy.data,pips_sell=form.pips_sell.data,max_pos_sell=form.max_pos_sell.data,
                             max_pos_buy=form.max_pos_buy.data,timer=timer,recursive_timer=sndTimer,order_type=type,options=options,pl_long=pl_long,pl_short=pl_short,activated=True)
         db.session.add(inputs)
         db.session.commit()
@@ -700,8 +728,10 @@ def ftxwebhook():
     side_data = data['strategy']['order_action']
     if exchange == 'FTX':
         # Symbol: BTCUSD
-        symbol = data["ticker"]
-        symbol_data = symbol[:-4] + "-" + symbol[-4:]
+        #symbol = data["ticker"]
+        #symbol_data = symbol[:-4] + "-" + symbol[-4:]
+        symbol = FTXQuery()
+        symbol_data = symbol
         # Price close FTX
         price = data["strategy"]["order_price"]
     else:

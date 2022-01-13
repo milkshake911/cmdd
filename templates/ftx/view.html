@@ -10,6 +10,7 @@
     {% else %}
         {% for item in values %}
     <p style="color:white">
+        symbol: {{item.symbol}} -
         Quantity : {{item.qty}} - Pips Buy : {{item.pips_buy}} -
         Pips Sell : {{item.pips_sell}} - Capital : {{item.capital}} - Max Position (Long) : {{item.max_pos_buy}} -
         Max Position (Short) : {{ item.max_pos_sell }} ->{% if item.options == "Timer Stop Loss" %} {{ item.options }} - Timer : {{ item.timer }}s -
