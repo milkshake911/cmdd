@@ -10,7 +10,7 @@ import json
 from configs import FTXConfig, BYBITConfig
 from datetime import datetime
 import pytz
-from Forms import LoginForm,FTXInputsForms,BYBITInputsForms,TestingForm,FTXOrdersForms,BBOrdersForms,FTXStrat,BBStrat,APIKEY
+from Forms import *
 from Testing import *
 import pandas as pd 
 import os
@@ -111,7 +111,33 @@ def trackOrders():
                 print("Waiting for action.")
 
 
-    
+
+
+def FTXQuery():
+    connection = sqlite3.connect("Database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM ftx_input")
+    rows = cursor.fetchall()
+
+    LastRowData = rows[-1]
+    return LastRowData
+
+
+
+# GET PERPS ONLY
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def get_perps():
+    SYMBOLS = FTXClient.get_futures()
+    OnlyPerps = []
+    for PerpMarkets in SYMBOLS:
+    #print(markets["name"])
+        if "perp" in PerpMarkets["name"].lower():
+            OnlyPerps.append(PerpMarkets["name"])
+    return OnlyPerps
+
+
 # FLASK SERVER
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
