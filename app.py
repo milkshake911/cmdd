@@ -10,7 +10,7 @@ import json
 from configs import FTXConfig, BYBITConfig
 from datetime import datetime
 import pytz
-from Forms import *
+import Forms
 from Testing import *
 import pandas as pd 
 import os
@@ -359,7 +359,7 @@ def before_request():
 
 @app.route('/Login',methods=['GET','POST'])
 def login():
-    form=LoginForm()
+    form=Forms.LoginForm()
     if form.submit.data:
         session.pop('user_id', None)
         username = form.username.data
@@ -379,7 +379,7 @@ def login():
 #Set API Key and secret
 @app.route('/API',methods=['GET',"POST"])
 def api():
-    form=APIKEY()
+    form=Forms.APIKEY()
     if form.validate_on_submit():
         try:
             session.pop('api_key_ftx',None)
@@ -487,9 +487,9 @@ def ftxInputs():
     timer = 0
     type = ''
     options = ''
-    form = FTXInputsForms()
-    orderForm = FTXOrdersForms()
-    stratForm = FTXStrat()
+    form = Forms.FTXInputsForms()
+    orderForm = Forms.FTXOrdersForms()
+    stratForm = Forms.FTXStrat()
     if form.validate.data:
         if int(request.form['Options']) == 1:
             try:
@@ -620,7 +620,7 @@ def ftxTesting():
     loses_doll = 0
     sum_doll = 0
     rsi = [{'time':0,'value':0}]
-    form = TestingForm()
+    form = Forms.TestingForm()
     if form.validate_on_submit():
         date_start = request.form['datestart']
         date_end = request.form['datend']
@@ -1078,9 +1078,9 @@ def bybitInputs():
     timer = 0
     type= ''
     options = ''
-    form = BYBITInputsForms()
-    orderForms = BBOrdersForms()
-    stratForm = BBStrat()
+    form = Forms.BYBITInputsForms()
+    orderForms = Forms.BBOrdersForms()
+    stratForm = Forms.BBStrat()
     if form.validate.data:
         if int(request.form['Options']) == 1:
             try:
