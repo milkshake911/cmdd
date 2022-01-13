@@ -5,17 +5,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, FloatField, IntegerField, DateField, SelectField, BooleanField
 from wtforms.validators import EqualTo, DataRequired
 from datetime import datetime
-from app import get_perps
+from scripts import get_perps, FTXQuery
 
-def FTXQuery():
-    connection = sqlite3.connect("Database.db")
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT * FROM ftx_input")
-    rows = cursor.fetchall()
-
-    LastRowData = rows[-1]
-    return LastRowData
 
 
 class LoginForm(FlaskForm):

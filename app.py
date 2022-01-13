@@ -290,16 +290,9 @@ if not db_file_exits:
 
    
 
-# GET PERPS ONLY
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-def get_perps():
-    SYMBOLS = FTXClient.get_futures()
-    OnlyPerps = []
-    for PerpMarkets in SYMBOLS:
-    #print(markets["name"])
-        if "perp" in PerpMarkets["name"].lower():
-            OnlyPerps.append(PerpMarkets["name"])
-    return OnlyPerps
+
 
 
 # QUERY FTX_INPUT
@@ -1497,6 +1490,6 @@ def bybitWebhook():
     
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
         
         
