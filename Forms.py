@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, FloatField, IntegerField, DateField, SelectField, BooleanField
 from wtforms.validators import EqualTo, DataRequired
 from datetime import datetime
-
+import scripts
 
 
 
@@ -20,23 +20,24 @@ class LoginForm(FlaskForm):
 class FTXInputsForms(FlaskForm):
 
     checkbox = BooleanField('?Disabled')
+    symbols = SelectField(validators=[DataRequired()],choices=[perpmarket for perpmarket in scripts.get_perps()],default=scripts.FTXQuery()[-1])
 
-    quantity = FloatField('Quantity ($)', validators=[DataRequired()],default=0)
+    quantity = FloatField('Quantity ($)', validators=[DataRequired()],default=scripts.FTXQuery()[1])
 
-    pips_buy = FloatField('Pips Buy', validators=[DataRequired()],default=0)
+    pips_buy = FloatField('Pips Buy', validators=[DataRequired()],default=scripts.FTXQuery()[2])
 
-    pips_sell = FloatField('Pips Sell', validators=[DataRequired()],default=0)
+    pips_sell = FloatField('Pips Sell', validators=[DataRequired()],default=scripts.FTXQuery()[3])
 
-    max_pos_buy = IntegerField('Max Position (Long)', validators=[DataRequired()],default=0)
+    max_pos_buy = IntegerField('Max Position (Long)', validators=[DataRequired()],default=scripts.FTXQuery()[5])
     
-    max_pos_sell = IntegerField('Max Position (Short)', validators=[DataRequired()],default=0)
+    max_pos_sell = IntegerField('Max Position (Short)', validators=[DataRequired()],default=scripts.FTXQuery()[6])
 
     
     Options = SelectField('Options',choices=[("0",'Stop Loss Options'),('1','Timer Stop Loss'),('2','Percentage Stop Loss')])
 
-    percentage_long = FloatField(render_kw={'placeholder':'Percentage Loss (Long)'})
+    percentage_long = FloatField(render_kw={'placeholder':'Percentage Loss (Long)'}, default=scripts.FTXQuery()[8])
 
-    percentage_short = FloatField(render_kw={'placeholder':'Percentage Loss (Short)'})
+    percentage_short = FloatField(render_kw={'placeholder':'Percentage Loss (Short)'}, default=scripts.FTXQuery()[9])
 
     validate = SubmitField('Validate')
 

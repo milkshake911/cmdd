@@ -10,13 +10,14 @@ import json
 from configs import FTXConfig, BYBITConfig
 from datetime import datetime
 import pytz
-from Forms import *
+import Forms
 from Testing import *
 import pandas as pd 
 import os
 from clients.FTXClient import FTXClient
 from clients.BYBITClient import BBClient
 from time import sleep
+import sqlite3
 
 
 # ORDER METHODS
@@ -110,7 +111,33 @@ def trackOrders():
                 print("Waiting for action.")
 
 
-    
+
+
+def FTXQuery():
+    connection = sqlite3.connect("Database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM ftx_input")
+    rows = cursor.fetchall()
+
+    LastRowData = rows[-1]
+    return LastRowData
+
+
+
+# GET PERPS ONLY
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def get_perps():
+    SYMBOLS = FTXClient.get_futures()
+    OnlyPerps = []
+    for PerpMarkets in SYMBOLS:
+    #print(markets["name"])
+        if "perp" in PerpMarkets["name"].lower():
+            OnlyPerps.append(PerpMarkets["name"])
+    return OnlyPerps
+
+
 # FLASK SERVER
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -140,6 +167,7 @@ users.append(User(id=2,username='Zac',password='Zac123'))
 
 class FTXInput(db.Model):
     id = db.Column("id",db.Integer, primary_key=True)
+    symbol = db.Column("symbol",db.String(20),default="")
     qty = db.Column(db.Integer,default=0)
     pips_buy = db.Column(db.Integer,default=0)
     pips_sell = db.Column(db.Integer,default=0)
@@ -155,12 +183,13 @@ class FTXInput(db.Model):
     activated = db.Column(db.Boolean,default=False)
     
 
-    def __init__(self,qty,capital,max_pos_buy,max_pos_sell,pips_buy,
+    def __init__(self,symbol,qty,max_pos_buy,max_pos_sell,pips_buy,
                  pips_sell,timer,order_type,recursive_timer,options,pl_long,pl_short,activated):
+        self.symbol = symbol # added new
         self.qty = qty
         self.pips_buy = pips_buy
         self.pips_sell = pips_sell
-        self.capital = capital
+        #self.capital = capital
         self.max_pos_buy = max_pos_buy
         self.max_pos_sell = max_pos_sell
         self.options = options
@@ -286,6 +315,25 @@ if not db_file_exits:
     db.create_all()
 
    
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# QUERY FTX_INPUT
+def FTXQueryLastSymbol():
+    connection = sqlite3.connect("Database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM ftx_input")
+    rows = cursor.fetchall()
+
+    LastSymbol = rows[-1][-1]
+    return LastSymbol
+
+
 # ROUTES AND METHODS FOR TRADES
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 @app.before_request
@@ -311,7 +359,7 @@ def before_request():
 
 @app.route('/Login',methods=['GET','POST'])
 def login():
-    form=LoginForm()
+    form=Forms.LoginForm()
     if form.submit.data:
         session.pop('user_id', None)
         username = form.username.data
@@ -331,7 +379,7 @@ def login():
 #Set API Key and secret
 @app.route('/API',methods=['GET',"POST"])
 def api():
-    form=APIKEY()
+    form=Forms.APIKEY()
     if form.validate_on_submit():
         try:
             session.pop('api_key_ftx',None)
@@ -439,9 +487,9 @@ def ftxInputs():
     timer = 0
     type = ''
     options = ''
-    form = FTXInputsForms()
-    orderForm = FTXOrdersForms()
-    stratForm = FTXStrat()
+    form = Forms.FTXInputsForms()
+    orderForm = Forms.FTXOrdersForms()
+    stratForm = Forms.FTXStrat()
     if form.validate.data:
         if int(request.form['Options']) == 1:
             try:
@@ -469,7 +517,7 @@ def ftxInputs():
                 flash('Validation incorrect. Please fill all inputs!','danger')
         else:
             flash('Validation correct. Update done!', 'success')
-        inputs = FTXInput(qty=form.quantity.data,pips_buy=form.pips_buy.data,pips_sell=form.pips_sell.data,capital=form.capital_fund.data,max_pos_sell=form.max_pos_sell.data,
+        inputs = FTXInput(symbol=form.symbols.data,qty=form.quantity.data,pips_buy=form.pips_buy.data,pips_sell=form.pips_sell.data,max_pos_sell=form.max_pos_sell.data,
                             max_pos_buy=form.max_pos_buy.data,timer=timer,recursive_timer=sndTimer,order_type=type,options=options,pl_long=pl_long,pl_short=pl_short,activated=True)
         db.session.add(inputs)
         db.session.commit()
@@ -572,7 +620,7 @@ def ftxTesting():
     loses_doll = 0
     sum_doll = 0
     rsi = [{'time':0,'value':0}]
-    form = TestingForm()
+    form = Forms.TestingForm()
     if form.validate_on_submit():
         date_start = request.form['datestart']
         date_end = request.form['datend']
@@ -700,8 +748,10 @@ def ftxwebhook():
     side_data = data['strategy']['order_action']
     if exchange == 'FTX':
         # Symbol: BTCUSD
-        symbol = data["ticker"]
-        symbol_data = symbol[:-4] + "-" + symbol[-4:]
+        #symbol = data["ticker"]
+        #symbol_data = symbol[:-4] + "-" + symbol[-4:]
+        symbol = FTXQueryLastSymbol()
+        symbol_data = symbol
         # Price close FTX
         price = data["strategy"]["order_price"]
     else:
@@ -1028,9 +1078,9 @@ def bybitInputs():
     timer = 0
     type= ''
     options = ''
-    form = BYBITInputsForms()
-    orderForms = BBOrdersForms()
-    stratForm = BBStrat()
+    form = Forms.BYBITInputsForms()
+    orderForms = Forms.BBOrdersForms()
+    stratForm = Forms.BBStrat()
     if form.validate.data:
         if int(request.form['Options']) == 1:
             try:

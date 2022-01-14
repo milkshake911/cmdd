@@ -69,7 +69,10 @@
 				<legend class="border-bottom mb-4 float-right" style="width:92%;">Parameter A</legend>
 			</div>
 			<div id="container-inputs-a">
+				{{ form.symbols.label(class="form-control-label") }}
+				{{ form.symbols(class="form-control-label") }}
 				<div class="form-group">
+					
 					{{ form.quantity.label(class="form-control-label") }}
 					{% if form.quantity.errors %}
 					{{ form.quantity(class="form-control form-control-lg is-invalid") }}
@@ -205,11 +208,14 @@
 	<form method="post" action="{{ url_for('ftxInputs') }}">
 		{{ stratForm.hidden_tag() }}
 		<fieldset class="form-group">
+			
 			<div class="mb-2" style="height: 50px;">
 				{{ stratForm.checkbox(class="mr-2 mt-3 float-left",onclick="javascript: disableParamaterB(this);")}}
 				<legend class="border-bottom mb-4 float-right" style="width:92%;">Parameter B</legend></li>
 			</div>
 			<div id="container-inputs-b">
+				{{ form.symbols.label(class="form-control-label") }}
+				{{ form.symbols(class="form-control-label") }}
 				<div class="form-group">
 					{{ stratForm.qty.label(class="form-control-label") }}
 					{{ stratForm.qty(class="form-control form-control-lg") }}
