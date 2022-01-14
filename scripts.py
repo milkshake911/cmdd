@@ -1,5 +1,5 @@
 import sqlite3
-import app
+from clients.FTXClient import FTXClient
 
 
 
@@ -19,7 +19,7 @@ def FTXQuery():
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def get_perps():
-    SYMBOLS = app.FTXClient.get_futures()
+    SYMBOLS = FTXClient.get_futures()
     OnlyPerps = []
     for PerpMarkets in SYMBOLS:
     #print(markets["name"])
