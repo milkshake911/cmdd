@@ -570,7 +570,7 @@ def ftxInputs():
             reopening = stratForm.reopening.data
             orderType = request.form['typeStrat']
             recursive_timer = request.form['recursive_timer']
-            inputs = FTXStrategy(stratForm.qty.data,stratForm.pips_buy.data,stratForm.pips_sell.data,stratForm.timer.data,
+            inputs = FTXStrategy(stratForm.symbols.data,stratForm.qty.data,stratForm.pips_buy.data,stratForm.pips_sell.data,stratForm.timer.data,
             recursive_timer,orderType,stratForm.cancel_order.data,reopening,True)
             db.session.add(inputs)
             db.session.commit()
