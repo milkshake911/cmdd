@@ -790,7 +790,7 @@ def ftxwebhook():
 
 
     # Get size and side position 
-    size = FTXClient.get_position(name=symbol_data)['size']
+    size = 10
     sizeDollars = size * price 
     side = FTXClient.get_position(name=symbol_data)['side']
     
