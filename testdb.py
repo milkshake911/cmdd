@@ -29,6 +29,6 @@ def query():
     print(rows[-1][-1])
 
 
-#add_column("Database.db","ftx_input","symbol","String")
+add_column("Database.db","ftx_strategy","symbol","String")
 
-query()
+#query()
