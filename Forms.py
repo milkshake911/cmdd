@@ -127,6 +127,7 @@ class BBOrdersForms(FlaskForm):
 class FTXStrat(FlaskForm):
 
     checkbox = BooleanField('?Disabled')
+    symbols = SelectField(validators=[DataRequired()],choices=[perpmarket for perpmarket in scripts.get_perps()])
 
     qty = FloatField("Quantity ($)",validators=[DataRequired()],default=0)
 
