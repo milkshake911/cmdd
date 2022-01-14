@@ -259,6 +259,7 @@ class BBStrategy(db.Model):
 
 class FTXStrategy(db.Model):
     id = db.Column("id",db.Integer, primary_key=True)
+    symbol = db.Column("symbol",db.String(20),default="")
     qty = db.Column(db.Integer,default=0,nullable=True)
     pips_buy = db.Column(db.Integer,default=0,nullable=True)
     pips_sell = db.Column(db.Integer,default=0,nullable=True)
@@ -269,9 +270,10 @@ class FTXStrategy(db.Model):
     reopening = db.Column(db.Boolean,default=False)
     activated = db.Column(db.Boolean,default=False)
 
-    def __init__(self,qty,pips_buy,pips_sell,timer,recursive_timer,
+    def __init__(self,symbol,qty,pips_buy,pips_sell,timer,recursive_timer,
                 order_type,cancel_orders,reopening,activated):
         self.qty = qty
+        self.symbol = symbol
         self.pips_buy = pips_buy
         self.pips_sell = pips_sell
         self.timer = timer
