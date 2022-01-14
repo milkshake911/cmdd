@@ -332,7 +332,7 @@ def FTXQueryLastSymbol():
     cursor.execute("SELECT * FROM ftx_input")
     rows = cursor.fetchall()
 
-    LastSymbol = rows[-1][-1]
+    LastSymbol = rows[-1]
     return LastSymbol
 
 
@@ -752,7 +752,7 @@ def ftxwebhook():
         # Symbol: BTCUSD
         #symbol = data["ticker"]
         #symbol_data = symbol[:-4] + "-" + symbol[-4:]
-        symbol = FTXQueryLastSymbol()
+        symbol = FTXQueryLastSymbol()[-1]
         symbol_data = symbol
         # Price close FTX
         price = data["strategy"]["order_price"]
@@ -790,9 +790,9 @@ def ftxwebhook():
 
 
     # Get size and side position 
-    size = 10
+    size = FTXQueryLastSymbol()[1]
     sizeDollars = size * price 
-    side = "buy"
+    side = side_data
     
     print(f"Current size ===> {sizeDollars}, side ==> {side}")
     
