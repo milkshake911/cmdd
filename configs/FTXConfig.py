@@ -10,8 +10,8 @@ webhook_password = 'TERMINAL'
 #api_secretFTX = "pSaP7nLCoB7aVol6SEtjK_EryYAv89SFqMuT3ylK"
 
 #Erfan
-api_keyFTX = "L1hj7SN_NzYAjsCkVU2hsvHF3Ls8e5DQDPvYgrQ5"
-api_secretFTX = "EyjxiVfbKHx3XbGBGgqNx9a-trIh4vd8D2OoFzfY"
+api_keyFTX = "Qa8KFhx5B2XoJmGkJTmZ2umbHsDP5RmSpu5kkuNo"
+api_secretFTX = "js3bmutOkuahVUhFv98id74jva07zs-Nzdw7XHCZ"
 
 count = 1
 one = False
